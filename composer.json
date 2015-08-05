@@ -1,0 +1,29 @@
+{
+  "name": "ajbdev/computus",
+  "description": "Object-oriented interface for ",
+  "type": "library",
+  "keywords": [
+    "calendar", "computus", "event", "events", "ical"
+  ],
+  "license": "BSD-2-Clause",
+  "authors": [
+    {
+      "name": "Andy Baird",
+      "email": "andybaird@gmail.com",
+      "role": "lead"
+    }
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Computus\\": "src/Computus/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Computus\\": "src/Computus/"
+    }
+  }
+}
