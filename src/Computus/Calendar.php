@@ -8,9 +8,17 @@ class Calendar
 {
     protected $name;
     protected $events = array();
+    protected $query = null;
 
     public function __construct($name = null) {
         $this->name = $name;
+    }
+
+    public function getQuery() {
+        if ($this->query === null) {
+            $this->query = new Query($this);
+        }
+        return $this->query;
     }
 
     /**
@@ -37,8 +45,8 @@ class Calendar
         $this->events[] = $event;
     }
 
-    public function overlaps(Event $event)
+    public function find()
     {
-
+        return $this->getQuery();
     }
 }
