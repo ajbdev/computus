@@ -9,4 +9,12 @@ interface EventInterface
     public function getStart();
 
     public function getEnd();
+
+    public function getAvailable();
+
+    public function overlaps(\DateTime $dateTime);
+
+    public function contains(\DateTime $start, \DateTime $end);
+
+    public function compare(\DateTime $dateTime);
 }

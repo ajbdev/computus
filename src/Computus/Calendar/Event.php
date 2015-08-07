@@ -1,36 +1,25 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: andybaird
+ * Date: 8/6/15
+ * Time: 9:17 PM
+ */
 
 namespace Computus\Calendar;
 
-class Event implements EventInterface
+
+class Event
 {
-    protected $start;
-    protected $end;
-
-    /**
-     * @param \DateTime $start
-     * @param \DateTime $end
-     */
-    public function __construct(\DateTime $start, \DateTime $end) {
-        $this->start = $start;
-        $this->end = $end;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getStart()
+    public static function create($start, $end)
     {
-        return $this->start;
+        return new RepeatableEvent(self::parse($start), self::parse($end));
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getEnd()
-    {
-        return $this->end;
+    public static function parse($dt) {
+        if ($dt instanceof \DateTime) {
+            return $dt;
+        }
+        return new \DateTime($dt);
     }
-
-
 }

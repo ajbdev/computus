@@ -2,18 +2,22 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Computus\Calendar;
+use Computus\Calendar\Event;
 
-$calendar1 = new Calendar();
+$calendar = new Calendar();
 
-$calendar2 = new Calendar();
 
-$dt1 = new \DateTime();
-$dt1->modify('+1 day');
+$lunch = Event::create('Tomorrow 12:00 PM', 'Tomorrow 1:00 PM');
 
-$dt2 = new \DateTime();
+$calendar->insert($lunch);
 
-$calendar1->find()
-          ->available('1 hour')
-          ->between($dt1, $dt2)
-          ->excluding('non-business hours')
+
+$calendar->find()
+         ->at('next Tuesday')
+         ->available('1 hour')
+;
+
+$calendar->find()
+         ->between('Monday', 'Friday')
+         ->events()
 ;

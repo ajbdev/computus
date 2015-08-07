@@ -3,11 +3,12 @@
 namespace Computus;
 
 use Computus\Calendar\Event;
+use Computus\Calendar\EventInterface;
+use Computus\Calendar\Query;
 
-class Calendar
+class Calendar extends \SplMinHeap
 {
     protected $name;
-    protected $events = array();
     protected $query = null;
 
     public function __construct($name = null) {
@@ -19,6 +20,15 @@ class Calendar
             $this->query = new Query($this);
         }
         return $this->query;
+    }
+
+    /**
+     * @param mixed $event1
+     * @param mixed $event2
+     * @return int
+     */
+    public function compare($event1,$event2) {
+        return $event1->compare($event2->getEnd());
     }
 
     /**
@@ -35,14 +45,6 @@ class Calendar
     public function setName($name)
     {
         $this->name = $name;
-    }
-
-    /**
-     * @param Event $event
-     */
-    public function add(Event $event)
-    {
-        $this->events[] = $event;
     }
 
     public function find()
