@@ -11,12 +11,15 @@ namespace Computus\Calendar;
 
 class Event
 {
-    public static function create($start, $end)
+    public static function create($start, $end = null)
     {
         return new RepeatableEvent(self::parse($start), self::parse($end));
     }
 
     public static function parse($dt) {
+        if (is_null($dt)) {
+            return null;
+        }
         if ($dt instanceof \DateTime) {
             return $dt;
         }

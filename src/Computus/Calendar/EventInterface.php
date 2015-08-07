@@ -12,6 +12,8 @@ interface EventInterface
 
     public function getAvailable();
 
+    public function getDuration();
+
     public function overlaps(\DateTime $dateTime);
 
     public function contains(\DateTime $start, \DateTime $end);

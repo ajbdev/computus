@@ -11,7 +11,20 @@ namespace Computus\Calendar;
 
 class RepeatableEvent extends AbstractEvent
 {
+    /**
+     * @var Schedule
+     */
     public $schedule = null;
+
+    public function schedule($cycle, $period, $interval = null) {
+        $this->schedule = new Schedule();
+
+        $this->schedule->setCycle($cycle);
+
+        $this->schedule->setPeriod($period);
+
+        $this->schedule->setInterval($interval);
+    }
 
     /**
      * @param \DateTime $dateTime

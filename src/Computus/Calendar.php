@@ -31,6 +31,19 @@ class Calendar extends \SplMinHeap
         return $event1->compare($event2->getEnd());
     }
 
+
+    /**
+     * @param Calendar $calendar
+     * @return Calendar
+     */
+    public function combine(Calendar $calendar) {
+        $combined = clone $this;
+        foreach ($calendar as $event) {
+            $combined->insert($event);
+        }
+        return $combined;
+    }
+
     /**
      * @return string
      */
@@ -45,6 +58,13 @@ class Calendar extends \SplMinHeap
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function free(EventInterface $event) {
+        return $this->find()
+                    ->between($event->getStart(), $event->getEnd())
+                    ->available($event->getDuration()) > 0
+        ;
     }
 
     public function find()

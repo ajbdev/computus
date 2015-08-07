@@ -8,13 +8,15 @@ class Schedule
     protected $interval;
     protected $cycle;
 
+    protected $days;
     protected $weekdays;
     protected $months;
     protected $years;
 
     const CYCLE_DAILY       = 1;
-    const CYCLE_MONTHLY     = 2;
-    const CYCLE_YEARLY      = 3;
+    const CYCLE_WEEKLY      = 2;
+    const CYCLE_MONTHLY     = 3;
+    const CYCLE_YEARLY      = 4;
 
     /**
      * @return mixed
@@ -30,6 +32,10 @@ class Schedule
     public function setInterval($interval)
     {
         $this->interval = intval($interval);
+    }
+
+    public function setPeriod($period) {
+        // Lots of logic here based on the cycle
     }
 
     /**

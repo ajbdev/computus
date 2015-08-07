@@ -16,20 +16,28 @@ class Query
         $this->calendar = $calendar;
     }
 
-    public function available($time)
+    public function available($duration)
     {
         $this->select = self::SELECT_AVAILABLE;
-        // THIS SHOULD RETURN AVAILABLE DATE INTERVALS
+        // THIS SHOULD RETURN AVAILABLE DATE RANGES @todo: as events??
+
+        return array();
     }
 
     public function events($criteria = null)
     {
         $this->select = self::SELECT_BUSY;
         // THIS SHOULD RETURN FILTERED EVENTS
+
+        return array();
     }
 
     public function between($start, $end)
     {
+        return $this;
+    }
+
+    public function after($min) {
         return $this;
     }
 
