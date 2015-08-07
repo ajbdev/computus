@@ -16,7 +16,7 @@ abstract class AbstractEvent implements EventInterface
     public function __construct(\DateTime $start = null, \DateTime $end = null) {
         $this->start = $start;
         $this->end = $end;
-        $this->available = true;
+        $this->available = false;
     }
 
     /**
@@ -102,10 +102,10 @@ abstract class AbstractEvent implements EventInterface
     public function compare(\DateTime $dateTime)
     {
         if ($this->getEnd() < $dateTime) {
-            return -1;
+            return 1;
         }
         if ($this->getStart() > $dateTime) {
-            return 1;
+            return -1;
         }
         return 0;
     }

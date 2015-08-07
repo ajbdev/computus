@@ -6,38 +6,65 @@ class Query
 {
     protected $calendar;
 
-    const SELECT_AVAILABLE  = 1;
-    const SELECT_BUSY       = 2;
+    const FIND_AVAILABLE  = 1;
+    const FIND_BUSY       = 2;
 
-    protected $select;
-    protected $selectDuration;
+    protected $find;
+    protected $findDuration;
+    protected $findNumberOfEvents;
+    protected $findStart;
+    protected $findEnd;
 
     public function __construct(Calendar $calendar) {
         $this->calendar = $calendar;
     }
 
-    public function available($duration)
+    public function reset()
     {
-        $this->select = self::SELECT_AVAILABLE;
+        $this->find = null;
+        $this->findDuration = null;
+        $this->findStart = null;
+        $this->findEnd = null;
+        $this->findNumberOfEvents = null;
+    }
+
+    public function available(\DateInterval $duration, $num = 1)
+    {
+        $this->select = self::FIND_AVAILABLE;
+        $this->findDuration = $duration;
+        $this->findNumberOfEvents = $num;
         // THIS SHOULD RETURN AVAILABLE DATE RANGES @todo: as events??
 
-        return array();
+        return $this->execute();
     }
 
     public function events($criteria = null)
     {
-        $this->select = self::SELECT_BUSY;
+        $this->select = self::FIND_BUSY;
         // THIS SHOULD RETURN FILTERED EVENTS
 
-        return array();
+        return $this->execute();
     }
 
-    public function between($start, $end)
+    public function between(\DateTime $start, \DateTime $end)
     {
+        $this->findStart = $start;
+        $this->findEnd = $end;
+
         return $this;
     }
 
-    public function after($min) {
+    public function after(\DateTime $dateTime)
+    {
+        $this->findStart = $dateTime;
+
+        return $this;
+    }
+
+    public function before(\DateTime $dateTime)
+    {
+        $this->findEnd = $dateTime;
+
         return $this;
     }
 
@@ -53,11 +80,27 @@ class Query
 
     protected function execute()
     {
-        foreach ($this->calendar as $events) {
+        $result = new Calendar();
+
+        if (!$this->findStart) {
+            $this->findStart = new \DateTime();
+        }
+
+        foreach ($this->calendar as $event) {
+            if ($event->getStart() < $this->findStart) {
+                continue;
+            }
+
+            if ($this->find == self::FIND_BUSY && !$event->getAvailable()) {
+                $result->insert($event);
+            } else if ($this->find == self::FIND_AVAILABLE) {
+                
+            }
 
         }
+
+        $this->reset();
+
+        return $result;
     }
-
-
-
 }

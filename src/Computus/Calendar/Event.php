@@ -23,6 +23,7 @@ class Event
         if ($dt instanceof \DateTime) {
             return $dt;
         }
+
         return new \DateTime($dt);
     }
 }

@@ -23,8 +23,20 @@ class Calendar extends \SplMinHeap
     }
 
     /**
+     * @param Event $event
+     *
+     * @return $this
+     */
+    public function add(Event $event) {
+        $this->insert($event);
+
+        return $this;
+    }
+
+    /**
      * @param mixed $event1
      * @param mixed $event2
+     *
      * @return int
      */
     public function compare($event1,$event2) {
@@ -34,6 +46,7 @@ class Calendar extends \SplMinHeap
 
     /**
      * @param Calendar $calendar
+     *
      * @return Calendar
      */
     public function combine(Calendar $calendar) {
@@ -60,6 +73,10 @@ class Calendar extends \SplMinHeap
         $this->name = $name;
     }
 
+    /**
+     * @param EventInterface $event
+     * @return bool
+     */
     public function free(EventInterface $event) {
         return $this->find()
                     ->between($event->getStart(), $event->getEnd())
