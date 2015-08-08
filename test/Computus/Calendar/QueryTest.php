@@ -28,8 +28,8 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     public function testFindEventsBetween()
     {
         $results = $this->calendar->find()
-                       ->between(new \DateTime('today'), new \DateTime('tomorrow'))
-                       ->events();
+                                   ->between(new \DateTime('today'), new \DateTime('tomorrow'))
+                                   ->events();
 
         $this->assertEquals(1, count($results));
     }
