@@ -10,6 +10,7 @@ class Calendar extends \SplMinHeap
 {
     protected $name;
     protected $query = null;
+    protected $busyNonBusinessHours = true;
 
     public function __construct($name = null) {
         $this->name = $name;
@@ -88,4 +89,22 @@ class Calendar extends \SplMinHeap
     {
         return $this->getQuery();
     }
+
+    /**
+     * @return boolean
+     */
+    public function isBusyNonBusinessHours()
+    {
+        return $this->busyNonBusinessHours;
+    }
+
+    /**
+     * @param boolean $busyNonBusinessHours
+     */
+    public function setBusyNonBusinessHours($busyNonBusinessHours)
+    {
+        $this->busyNonBusinessHours = $busyNonBusinessHours;
+    }
+
+
 }

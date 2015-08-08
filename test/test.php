@@ -56,3 +56,6 @@ if ($andysCalendar->free($event)) {
 
 $event = $andysCalendar->find()->at('tomorrow')->after('3:00 PM')->available('1 hour');
 
+if (!$event) {
+    echo 'NOPE!';
+}

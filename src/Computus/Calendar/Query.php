@@ -6,14 +6,14 @@ class Query
 {
     protected $calendar;
 
-    const FIND_AVAILABLE  = 1;
-    const FIND_BUSY       = 2;
-
-    protected $find;
-    protected $findDuration;
-    protected $findNumberOfEvents;
-    protected $findStart;
-    protected $findEnd;
+    /**
+     * @var \DateTime
+     */
+    protected $start;
+    /**
+     * @var \DateTime
+     */
+    protected $end;
 
     public function __construct(Calendar $calendar) {
         $this->calendar = $calendar;
@@ -21,49 +21,72 @@ class Query
 
     public function reset()
     {
-        $this->find = null;
-        $this->findDuration = null;
-        $this->findStart = null;
-        $this->findEnd = null;
-        $this->findNumberOfEvents = null;
+        $this->start = null;
+        $this->end = null;
     }
 
     public function available(\DateInterval $duration, $num = 1)
     {
-        $this->select = self::FIND_AVAILABLE;
-        $this->findDuration = $duration;
-        $this->findNumberOfEvents = $num;
-        // THIS SHOULD RETURN AVAILABLE DATE RANGES @todo: as events??
+        $results = new Calendar();
 
-        return $this->execute();
+        $end = clone $this->start;
+        $proposedEvent = new ProposedEvent($this->start, $end->add($duration));
+
+        foreach ($this->calendar as $event) {
+            if (!$proposedEvent->overlaps($event)) {
+                $results->insert($proposedEvent);
+            }
+
+            if (count($results) === $num) {
+                break;
+            }
+
+            $proposedEvent->getStart()->add($duration);
+            $proposedEvent->getEnd()->add($duration);
+
+            if ($proposedEvent->getEnd() > $this->end) {
+                break;
+            }
+        }
+
+        return $results;
     }
 
     public function events($criteria = null)
     {
-        $this->select = self::FIND_BUSY;
-        // THIS SHOULD RETURN FILTERED EVENTS
+        $results = new Calendar();
 
-        return $this->execute();
+        foreach ($this->calendar as $event) {
+            if (($this->start && $event->getStart() < $this->start) ||
+                ($this->end && ($this->end < $event->getStart()))) {
+                continue;
+            }
+
+            $results->insert($event);
+        }
+
+        return $results;
+
     }
 
     public function between(\DateTime $start, \DateTime $end)
     {
-        $this->findStart = $start;
-        $this->findEnd = $end;
+        $this->start = $start;
+        $this->end = $end;
 
         return $this;
     }
 
     public function after(\DateTime $dateTime)
     {
-        $this->findStart = $dateTime;
+        $this->start = $dateTime;
 
         return $this;
     }
 
     public function before(\DateTime $dateTime)
     {
-        $this->findEnd = $dateTime;
+        $this->end = $dateTime;
 
         return $this;
     }
@@ -76,31 +99,5 @@ class Query
     public function at($date)
     {
         return $this;
-    }
-
-    protected function execute()
-    {
-        $result = new Calendar();
-
-        if (!$this->findStart) {
-            $this->findStart = new \DateTime();
-        }
-
-        foreach ($this->calendar as $event) {
-            if ($event->getStart() < $this->findStart) {
-                continue;
-            }
-
-            if ($this->find == self::FIND_BUSY && !$event->getAvailable()) {
-                $result->insert($event);
-            } else if ($this->find == self::FIND_AVAILABLE) {
-                
-            }
-
-        }
-
-        $this->reset();
-
-        return $result;
     }
 }
